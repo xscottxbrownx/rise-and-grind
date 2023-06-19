@@ -30,7 +30,7 @@ const NewTodo: React.FC<NewTodoProps> = ({ onAddTodo }) => {
 
   return (
     <form onSubmit={todoSubmitHandler}>
-      <Box m={2}>
+      <Box m={2} sx={{display: 'flex', alignItems: 'center'}}>
         <TextField
           id="todo-text"
           label="Todo Text"
