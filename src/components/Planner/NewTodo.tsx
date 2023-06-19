@@ -1,28 +1,49 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
+import { Box, IconButton, TextField } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 interface NewTodoProps {
   onAddTodo: (todoText: string) => void;
 };
 
 
-const NewTodo: React.FC<NewTodoProps> = props => {
+const NewTodo: React.FC<NewTodoProps> = ({ onAddTodo }) => {
 
-  const textInputRef = useRef<HTMLInputElement>(null);
+  const [todoText, setTodoText] = useState('');
+  const [error, setError] = useState(false);
 
   const todoSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    const enteredText = textInputRef.current!.value;
-    props.onAddTodo(enteredText);
+    if (todoText === '') {
+      setError(true);
+    } else {
+      onAddTodo(todoText);
+      setTodoText('');
+    }
+  }
+
+  const onchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoText(e.currentTarget.value);
+    setError(false);
   }
 
 
   return (
     <form onSubmit={todoSubmitHandler}>
-      <div>
-        <label htmlFor="todo-text">Todo Text</label>
-        <input type="text" id="todo-text" ref={textInputRef} />
-      </div>
-      <button type="submit">ADD TODO</button>
+      <Box m={2}>
+        <TextField
+          id="todo-text"
+          label="Todo Text"
+          variant="outlined"
+          value={todoText}
+          onChange={onchangeHandler}
+          helperText={error ? 'Text needed' : ''}
+          error={error}
+        />
+        <IconButton type="submit" aria-label="delete" color="error">
+          <AddIcon />
+        </IconButton>
+      </Box>
     </form>
   );
 };
